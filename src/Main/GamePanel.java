@@ -13,10 +13,13 @@ public class GamePanel extends JPanel implements Runnable{
     public int FPS = 60;
     Thread gameThread;
     Board board = new Board();
+    Mouse mouse = new Mouse();
+
 
     //Pieces
     public static ArrayList<Piece>  pieces = new ArrayList<>();
     public static ArrayList<Piece>  simPieces = new ArrayList<>();
+    Piece activePiece;
 
     //Color
     public static final int WHITE = 0;
@@ -28,6 +31,8 @@ public class GamePanel extends JPanel implements Runnable{
     public GamePanel(){
         setPreferredSize(new Dimension(WIDTH,HEIGHT)); // set width & height of panel
         setBackground(Color.BLACK); // set background colour
+        addMouseMotionListener(mouse);
+        addMouseListener(mouse);
 
         setPieces(); //set pieces
         copyPieces(pieces, simPieces); // copy pieces to simPieces
@@ -113,7 +118,30 @@ public class GamePanel extends JPanel implements Runnable{
 
     // update game board every turn
     public void update() {
+        //Mouse is clicked on piece
+        if(mouse.pressed){
+            if(activePiece == null){
+                for (Piece piece: simPieces){
+                    if(piece.colour == currentColour && piece.col == mouse.x/Board.SQUARE_SIZE && piece.row == mouse.y/Board.SQUARE_SIZE){
+                        activePiece = piece;
+                    }
+                }
+            }
+            //active piece is not null
+            else{
+                //holding piece
+                simulate();
 
+            }
+        }
+
+    }
+
+    public void simulate(){
+        activePiece.x = mouse.x - Board.HALF_SQUARE_SIZE;
+        activePiece.y = mouse.y- Board.HALF_SQUARE_SIZE;
+        activePiece.col = activePiece.getCol(activePiece.x);
+        activePiece.row = activePiece.getRow(activePiece.y);
     }
 
 
@@ -129,6 +157,16 @@ public class GamePanel extends JPanel implements Runnable{
         for(Piece p: simPieces){
             p.draw(g2);
         }
+        //Highlight curr square if moving piece is bing moved
+        if (activePiece != null){
+            g2.setColor(Color.PINK);
+            g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,0.7f));
+            g2.fillRect(activePiece.col*Board.SQUARE_SIZE,activePiece.row*Board.SQUARE_SIZE,Board.SQUARE_SIZE, Board.SQUARE_SIZE);
+            g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,1f));
+            //draw active piece in the end so not hidden by board or coloured squares
+            activePiece.draw(g2);
+        }
+
 
     }
 
