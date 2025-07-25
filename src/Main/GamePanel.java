@@ -15,6 +15,10 @@ public class GamePanel extends JPanel implements Runnable{
     Board board = new Board();
     Mouse mouse = new Mouse();
 
+    //booleans
+    boolean canMove;
+    boolean validSquare;
+
 
     //Pieces
     public static ArrayList<Piece>  pieces = new ArrayList<>();
@@ -134,14 +138,37 @@ public class GamePanel extends JPanel implements Runnable{
 
             }
         }
+        //make sure piece is moved to valid location
+        if(mouse.pressed == false){
+            if(activePiece!= null){
+                if (validSquare){
 
-    }
+                activePiece.updatePosition();
+                }
+                else{
+                    activePiece.resetPosition();
+                    activePiece=null;
+                    }
+                }
+
+            }
+        }
+
+
 
     public void simulate(){
+        canMove =false;
+        validSquare=false;
         activePiece.x = mouse.x - Board.HALF_SQUARE_SIZE;
         activePiece.y = mouse.y- Board.HALF_SQUARE_SIZE;
         activePiece.col = activePiece.getCol(activePiece.x);
         activePiece.row = activePiece.getRow(activePiece.y);
+
+        if(activePiece.canMove(activePiece.col,activePiece.row)){
+            canMove = true;
+            validSquare = true;
+        }
+
     }
 
 
@@ -159,10 +186,12 @@ public class GamePanel extends JPanel implements Runnable{
         }
         //Highlight curr square if moving piece is bing moved
         if (activePiece != null){
-            g2.setColor(Color.PINK);
-            g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,0.7f));
-            g2.fillRect(activePiece.col*Board.SQUARE_SIZE,activePiece.row*Board.SQUARE_SIZE,Board.SQUARE_SIZE, Board.SQUARE_SIZE);
-            g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,1f));
+            if(canMove) {
+                g2.setColor(Color.PINK);
+                g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.7f));
+                g2.fillRect(activePiece.col * Board.SQUARE_SIZE, activePiece.row * Board.SQUARE_SIZE, Board.SQUARE_SIZE, Board.SQUARE_SIZE);
+                g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
+            }
             //draw active piece in the end so not hidden by board or coloured squares
             activePiece.draw(g2);
         }
