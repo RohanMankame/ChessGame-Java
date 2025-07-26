@@ -64,7 +64,7 @@ public class GamePanel extends JPanel implements Runnable{
         pieces.add(new Rook(WHITE,7,7));
         pieces.add(new Bishop(WHITE,2,7));
         pieces.add(new Bishop(WHITE,5,7));
-        pieces.add(new King(WHITE,4,7));
+        pieces.add(new King(WHITE,4,4));
         pieces.add(new Queen(WHITE,3,7));
 
         //Black pieces
@@ -142,10 +142,14 @@ public class GamePanel extends JPanel implements Runnable{
         if(mouse.pressed == false){
             if(activePiece!= null){
                 if (validSquare){
+                    //copy simulation to actual board
+                    copyPieces(simPieces,pieces);
 
-                activePiece.updatePosition();
+                    activePiece.updatePosition();
                 }
                 else{
+                    //restore original board
+                    copyPieces(pieces,simPieces);
                     activePiece.resetPosition();
                     activePiece=null;
                     }
@@ -159,6 +163,10 @@ public class GamePanel extends JPanel implements Runnable{
     public void simulate(){
         canMove =false;
         validSquare=false;
+
+        copyPieces(pieces,simPieces);
+
+
         activePiece.x = mouse.x - Board.HALF_SQUARE_SIZE;
         activePiece.y = mouse.y- Board.HALF_SQUARE_SIZE;
         activePiece.col = activePiece.getCol(activePiece.x);
@@ -166,6 +174,11 @@ public class GamePanel extends JPanel implements Runnable{
 
         if(activePiece.canMove(activePiece.col,activePiece.row)){
             canMove = true;
+
+            if(activePiece.hittingP != null){
+                simPieces.remove(activePiece.hittingP.getIndex());
+            }
+
             validSquare = true;
         }
 

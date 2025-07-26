@@ -1,6 +1,7 @@
 package Piece;
 
 import Main.Board;
+import Main.GamePanel;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -14,6 +15,8 @@ public class Piece {
     public int x,y;
     public  int col, row, preCol, preRow;
     public int colour;
+
+    public Piece hittingP;
 
     public Piece(int color,int col,int row){
         this.col = col;
@@ -55,6 +58,18 @@ public class Piece {
 
     }
 
+
+    public int getIndex(){
+        for(int index = 0 ; index < GamePanel.simPieces.size();index++){
+            if(GamePanel.simPieces.get(index) ==this){
+                return index;
+
+            }
+        }
+        return 0;
+    }
+
+
     public void updatePosition(){
         x = getX(col);
         y = getY(row);
@@ -62,6 +77,7 @@ public class Piece {
         preRow = getRow(y);
     }
 
+    //move piece back to where it was picked up from
     public void resetPosition(){
         col = preCol;
         row = preRow;
@@ -74,6 +90,16 @@ public class Piece {
         return false;
     }
 
+    //check which piece moved piece is hitting/ moving too
+    public Piece getHittingPiece(int targetCol, int targetRow){
+        for (Piece piece : GamePanel.simPieces){
+            if( piece.col == targetCol && piece.row == targetRow && piece != this){
+                return piece;
+            }
+        }
+        return null;
+    }
+
     //play has to be on board
     public boolean isOnBoard(int targetCol, int targetRow){
         if((targetCol >= 0 && targetCol <= 7) && (targetRow >= 0 && targetRow <= 7)){
@@ -84,6 +110,22 @@ public class Piece {
         }
     }
 
+    public boolean isValidSquare(int targetCol, int targetRow){
+        hittingP = getHittingPiece(targetCol,targetRow);
+        if(hittingP == null){
+            return true;
+        }
+        else{
+            if( hittingP.colour != this.colour){
+                return true;
+            }
+            else{
+                hittingP = null;
+
+            }
+        }
+        return false;
+    }
 
     public void draw(Graphics2D g2){
         g2.drawImage(image,x,y,Board.SQUARE_SIZE,Board.SQUARE_SIZE,null);
