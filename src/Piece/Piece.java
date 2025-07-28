@@ -90,6 +90,14 @@ public class Piece {
         return false;
     }
 
+    //piece has not moved from its position during turn
+    public boolean isSameSquare(int targetCol, int targetRow){
+        if (targetCol == preCol && targetRow == preRow){
+            return true;
+        }
+        return false;
+    }
+
     //check which piece moved piece is hitting/ moving too
     public Piece getHittingPiece(int targetCol, int targetRow){
         for (Piece piece : GamePanel.simPieces){
@@ -125,6 +133,50 @@ public class Piece {
             }
         }
         return false;
+    }
+
+    public boolean pieceIsOnStraightLine(int targetCol, int targetRow){
+        //check when piece is moving left
+        for (int c = preCol-1; c>targetCol; c--){
+            for (Piece piece : GamePanel.simPieces){
+                if (piece.col == c && piece.row == targetRow){
+                    hittingP = piece;
+                    return true;
+                }
+            }
+        }
+        //check when piece is moving right
+        for (int c = preCol+1; c<targetCol; c++){
+            for (Piece piece : GamePanel.simPieces){
+                if (piece.col == c && piece.row == targetRow){
+                    hittingP = piece;
+                    return true;
+                }
+            }
+        }
+        //check when piece is moving up
+        for (int r = preRow-1; r>targetRow; r--){
+            for (Piece piece : GamePanel.simPieces){
+                if (piece.col == targetCol && piece.row == r){
+                    hittingP = piece;
+                    return true;
+                }
+            }
+        }
+
+        //check when piece is moving down
+        for (int r = preRow+1; r<targetRow; r++){
+            for (Piece piece : GamePanel.simPieces){
+                if (piece.col == targetCol && piece.row == r){
+                    hittingP = piece;
+                    return true;
+                }
+            }
+        }
+
+
+        return false;
+
     }
 
     public void draw(Graphics2D g2){
