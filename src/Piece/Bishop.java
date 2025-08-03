@@ -8,12 +8,30 @@ public class Bishop extends Piece{
         super(color, col, row);
 
         if(color == GamePanel.WHITE){
-            image = getImage("/piece/w-pawn");
+            image = getImage("/piece/w-bishop");
         }
         else{
-            image = getImage("/piece/b-pawn");
+            image = getImage("/piece/b-bishop");
         }
 
 
     }
+
+
+    public boolean canMove(int targetCol, int targetRow){
+        if (isOnBoard(targetCol,targetRow) && !isSameSquare(targetCol, targetRow)){
+
+            if(Math.abs(targetCol-preCol) == Math.abs(targetRow-preRow) ){
+                if(isValidSquare(targetCol,targetRow) && !pieceIsOnDiagonalLine(targetCol, targetRow)){
+                    return true;
+                }
+            }
+
+        }
+        return false;
+    }
+
+
+
+
 }
