@@ -36,6 +36,10 @@ public class Pawn extends Piece{
                 return true;
             }
 
+            if(Math.abs(targetCol-preCol)==1 && targetRow == preRow+moveValue && hittingP != null && hittingP.colour != this.colour){
+                return true;
+            }
+
 
         }
         return false;
