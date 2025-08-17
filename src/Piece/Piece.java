@@ -15,6 +15,7 @@ public class Piece {
     public int x,y;
     public  int col, row, preCol, preRow;
     public int colour;
+    public boolean moved = false;
 
     public Piece hittingP;
 
@@ -75,6 +76,8 @@ public class Piece {
         y = getY(row);
         preCol = getCol(x);
         preRow = getRow(y);
+        moved = true;
+
     }
 
     //move piece back to where it was picked up from
