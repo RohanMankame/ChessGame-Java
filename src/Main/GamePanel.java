@@ -222,6 +222,19 @@ public class GamePanel extends JPanel implements Runnable{
             activePiece.draw(g2);
         }
 
+        // Show Player Status e.g. whites turn
+        g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+        g2.setFont(new Font("Arial", Font.BOLD, 40));
+        g2.setColor(Color.PINK);
+
+        if (currentColour == WHITE){
+            g2.drawString("White's Turn", 840, 550);
+
+        }
+        else{
+            g2.drawString("Black's Turn", 840, 250);
+        }
+
 
     }
 
