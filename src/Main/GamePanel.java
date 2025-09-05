@@ -20,10 +20,13 @@ public class GamePanel extends JPanel implements Runnable{
     boolean validSquare;
 
 
+
     //Pieces
     public static ArrayList<Piece>  pieces = new ArrayList<>();
     public static ArrayList<Piece>  simPieces = new ArrayList<>();
     Piece activePiece;
+    private String previousMoveText = "—";
+
 
     //Color
     public static final int WHITE = 0;
@@ -146,6 +149,9 @@ public class GamePanel extends JPanel implements Runnable{
                     copyPieces(simPieces,pieces);
 
                     activePiece.updatePosition();
+                    // show move before changing player
+                    recordPreviousMove(activePiece);
+
                     changePlayer();
                 }
                 else{
@@ -197,6 +203,25 @@ public class GamePanel extends JPanel implements Runnable{
         activePiece = null;
     }
 
+    // get previous players move
+    private static String toAlgebraic(int col, int row) {
+        char file = (char) ('a' + col);
+        int rank = row + 1;
+        return "" + file + rank;
+    }
+
+
+    public void recordPreviousMove(Piece piece) {
+        String mover = (currentColour == WHITE) ? "White" : "Black";
+        String pieceName = (piece != null) ? piece.getClass().getSimpleName() : "Piece";
+        // Assumes piece.col/piece.row are already updated to the destination
+        String dest = toAlgebraic(piece.col, piece.row); // use getters if needed
+        previousMoveText = mover + " " + pieceName + " to " + dest;
+    }
+
+
+
+
 
     // handle graphics
     public void paintComponent(Graphics g) {
@@ -224,16 +249,23 @@ public class GamePanel extends JPanel implements Runnable{
 
         // Show Player Status e.g. whites turn
         g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-        g2.setFont(new Font("Arial", Font.BOLD, 40));
-        g2.setColor(Color.PINK);
+        g2.setFont(new Font("Arial", Font.PLAIN, 20));
+        g2.setColor(Color.WHITE);
 
         if (currentColour == WHITE){
-            g2.drawString("White's Turn", 840, 550);
+            g2.drawString("White's Turn", 840, 650);
 
         }
         else{
-            g2.drawString("Black's Turn", 840, 250);
+            g2.drawString("Black's Turn", 840, 150);
         }
+
+        g2.setFont(new Font("Arial", Font.PLAIN, 20));
+        g2.setColor(Color.WHITE);
+
+        String last = (previousMoveText == null || previousMoveText.isEmpty()) ? "—" : previousMoveText;
+        g2.drawString("Last move: " + last, 810, 400);
+
 
 
     }
