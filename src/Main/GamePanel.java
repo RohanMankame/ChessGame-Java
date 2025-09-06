@@ -37,7 +37,7 @@ public class GamePanel extends JPanel implements Runnable{
 
     public GamePanel(){
         setPreferredSize(new Dimension(WIDTH,HEIGHT)); // set width & height of panel
-        setBackground(Color.BLACK); // set background colour
+        setBackground(Color.DARK_GRAY); // set background colour
         addMouseMotionListener(mouse);
         addMouseListener(mouse);
 
@@ -249,19 +249,19 @@ public class GamePanel extends JPanel implements Runnable{
 
         // Show Player Status e.g. whites turn
         g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-        g2.setFont(new Font("Arial", Font.PLAIN, 20));
+        g2.setFont(new Font("Monospaced", Font.PLAIN, 20));
         g2.setColor(Color.WHITE);
 
         if (currentColour == WHITE){
-            g2.drawString("White's Turn", 840, 650);
+            g2.drawString("White's Turn", 870, 700);
 
         }
         else{
-            g2.drawString("Black's Turn", 840, 150);
+            g2.drawString("Black's Turn", 870, 100);
         }
 
-        g2.setFont(new Font("Arial", Font.PLAIN, 20));
-        g2.setColor(Color.WHITE);
+        g2.setFont(new Font("Monospaced", Font.PLAIN, 15));
+        g2.setColor(Color.RED);
 
         String last = (previousMoveText == null || previousMoveText.isEmpty()) ? "—" : previousMoveText;
         g2.drawString("Last move: " + last, 810, 400);
