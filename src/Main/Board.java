@@ -15,11 +15,11 @@ public class Board {
             for (int col = 0 ; col < MAX_COL ; col++ ) {
 
                 if (colour == 0){
-                    g2.setColor(new Color(4,72,109)); //set dark colour
+                    g2.setColor(new Color(102,0,204)); //set dark colour
                     colour = 1; //change colour for next position
                 }
                 else{
-                    g2.setColor(new Color(101,186,197)); //set light colour
+                    g2.setColor(new Color(229,204,255)); //set light colour
                     colour = 0; //change colour for next position
                 }
 
